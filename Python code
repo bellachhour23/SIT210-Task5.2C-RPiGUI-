@@ -1,0 +1,66 @@
+from tkinter import *
+import tkinter.font
+from gpiozero import LED
+import RPi.GPIO as gpio
+gpio.setmode(gpio.BCM)
+
+##hardware
+red = LED(25)
+green = LED(12)
+blue = LED(21)
+
+##GUI DEFINITIONS
+win =Tk()
+win.title("LED Toggler")
+myFont = tkinter.font.Font(family = 'Montserrat', size = 13, weight = "bold")
+
+def redLED():
+    if red.is_lit:
+        red.off()
+        redButton["text"] = "Red LED on"
+    else:
+        red.on()
+        green.off()
+        blue.off()
+        redButton["text"] = "Red LED off"
+
+def greenLED():
+    if green.is_lit:
+        green.off()
+        greenButton["text"] = "Green LED on"
+    else:
+        green.on()
+        red.off()
+        blue.off()
+        greenButton["text"] = "Green LED off"
+        
+def blueLED():
+    if blue.is_lit:
+        blue.off()
+        blueButton["text"] = "Red LED on"
+    else:
+        blue.on()
+        red.off()
+        green.off()
+        blueButton["text"] = "Blue LED off"
+        
+def exitS():
+    gpio.cleanup()
+    win.destroy()
+        
+        
+##WIDGETS
+redButton = Button(win, text = "Red light on", font = myFont, command = redLED, bg = 'red', height = 1, width = 18)
+redButton.grid(row = 0, column = 0)
+
+greenButton = Button(win, text = "Green light on", font = myFont, command = greenLED, bg = 'green', height = 1, width = 18)
+greenButton.grid(row = 0, column = 1)
+
+blueButton = Button(win, text = "Blue light on", font = myFont, command = blueLED, bg = 'blue', height = 1, width = 18)
+blueButton.grid(row = 0, column = 2)
+
+exitButton = Button(win, text = "Exit", font = myFont, command = exitS, bg = 'bisque2', height = 1, width = 6)
+exitButton.grid(row = 2, column = 1)
+
+win.protocol("WM_DELETE_WINDOW", exitS)
+win.mainloop()
